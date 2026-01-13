@@ -1,0 +1,16 @@
+{
+  "name": "weather-cli",
+  "version": "0.1.0",
+  "description": "Simple CLI to fetch current weather using Open-Meteo (no API key)",
+  "bin": {
+    "weather": "index.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node index.js --help"
+  },
+  "license": "MIT"
+}
