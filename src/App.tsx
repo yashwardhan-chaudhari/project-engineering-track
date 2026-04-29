@@ -50,6 +50,8 @@ function App() {
   const [newItemExpiryDays, setNewItemExpiryDays] = useState(7);
   const [requestPortionValue, setRequestPortionValue] = useState(25);
   const [logs, setLogs] = useState<string[]>([]);
+  const [correctModal, setCorrectModal] = useState<{ itemId: string; currentPortion: number } | null>(null);
+  const [correctPortionInput, setCorrectPortionInput] = useState('');
 
   // Add log
   const addLog = useCallback((message: string) => {
@@ -447,10 +449,8 @@ function App() {
                     <button 
                       className="correct-btn"
                       onClick={() => {
-                        const newPortion = prompt('Enter correct remaining portion:', String(item.remainingPortion));
-                        if (newPortion !== null) {
-                          correctInventory(item.id, Number(newPortion));
-                        }
+                        setCorrectModal({ itemId: item.id, currentPortion: item.remainingPortion });
+                        setCorrectPortionInput(String(item.remainingPortion));
                       }}
                     >
                       Correct
@@ -522,6 +522,34 @@ function App() {
           <li><strong>Scenario 4 (Phantom Eater):</strong> "Correct" button allows manual inventory adjustment when reality doesn't match the app.</li>
         </ul>
       </div>
+
+      {/* Correct Inventory Modal */}
+      {correctModal && (
+        <div className="modal-overlay" onClick={() => setCorrectModal(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <h3>🔧 Correct Inventory</h3>
+            <p>Enter the actual remaining portion:</p>
+            <input
+              type="number"
+              value={correctPortionInput}
+              onChange={e => setCorrectPortionInput(e.target.value)}
+              min="0"
+              max="100"
+              autoFocus
+            />
+            <div className="modal-buttons">
+              <button onClick={() => {
+                const newPortion = Number(correctPortionInput);
+                if (!isNaN(newPortion) && newPortion >= 0) {
+                  correctInventory(correctModal.itemId, newPortion);
+                  setCorrectModal(null);
+                }
+              }}>Save</button>
+              <button onClick={() => setCorrectModal(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
