@@ -1,0 +1,12 @@
+{
+  "name": "sidehustle-leaky-cache",
+  "version": "1.0.0",
+  "description": "Fixed SideHustle task caching backend with cache invalidation and TTL.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
